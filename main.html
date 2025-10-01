@@ -1,90 +1,141 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
-	<style>
-		/* .main{
-			border:2px solid black;
-		} */
-		.inside1{
-			width:100%;
-			display:flex;
-			justify-content:space-evenly;
-		}
-		.inside2{
-			width:100%;
-			display:flex;
-			justify-content:space-evenly;
-			padding:20px;
-		}
-		.circle{
-			width:50px;
-			height:50px;
-			border-radius:50%;
-			border:2px solid red;
-			margin:20px;
-		}
-		.circle:hover{
-			box-shadow:6px 4px 4px red;
-			cursor:pointer;
-		}
-		.inside2 button{
-			background:none;
-			border:none;
-		}
-		button:hover{
-			cursor:pointer;
-			/* font-size:20px; */
-		  box-shadow:6px 4px 2px black
-		}
-		.active{
-			background-color:grey;
-		}
-	</style>
+  <meta charset="UTF-8">
+  <title>Interactive Progress Bar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f5f5;
+    }
+    .main {
+      text-align: center;
+    }
+    .progress-container {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      width: 300px;
+      margin: 5px auto;
+    }
+    /* Grey background line */
+    .progress-container::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      /* left: 0; */
+      transform: translateY(-50%);
+      height: 4px;
+      width: 100%;
+      background: #ccc;
+      z-index: -1;
+    }
+    /* Blue progress line */
+    .progress {
+	  border:2px solid darkblue;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      height: 4px;
+      width: 0%;
+      background: #4caf50;
+      z-index: -1;
+      transition: width 0.4s ease;
+    }
+    .circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      transition: 0.4s;
+    }
+    .circle.active {
+      border-color: #4caf50;
+      background: #4caf50;
+      color: white;
+    }
+    .buttons {
+      margin-top: 20px;
+    }
+    button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-	<div class="main">
-		<div class="inside1">
-			<div class="circle" id="circle-1"></div>
-		<div class="circle" id="circle-2"></div>
-		<div class="circle" id="circle-3"></div>
-		<div class="circle" id="circle-4"></div>
-		<div class="circle" id="circle-5"></div>
-		</div>
-		<div class="inside2">
-			<button id="prev"><--</button>
-			<button id="next">--></button>
-		</div>
-	</div>
-    <script>
-		let circles = document.querySelectorAll(".circle");
-		let prev = document.getElementById("prev");
-		let next = document.getElementById("next");
+  <div class="main">
+    <div class="progress-container">
+      <div class="progress" id="progress"></div>
+      <div class="circle active" id="circle-1">1</div>
+      <div class="circle" id="circle-2">2</div>
+      <div class="circle" id="circle-3">3</div>
+      <div class="circle" id="circle-4">4</div>
+      <div class="circle" id="circle-5">5</div>
+    </div>
+    <div class="buttons">
+      <button id="prev" disabled>Prev</button>
+      <button id="next">Next</button>
+    </div>
+  </div>
 
-		let ind = -1;
-		let cind = -1;
-		if(ind<=0)prev.style.disable = true;
-		if(ind>=circles.length-1)next.style.disable=true;
-		if(ind>=1&& ind<=circles.length-2){
-			prev.style.disable = false;
-			next.style.disable = false;
-		}
-		
-		prev.addEventListener("click",(e)=>{
-			circles[ind].classList.remove("active");
-			ind--;
-		});
-		next.addEventListener("click",(e)=>{
-			ind++;
-			circles[ind].classList.add("active");
-		});
-		
-</script>
+  <script>
+    const progress = document.getElementById("progress");
+    const prev = document.getElementById("prev");
+    const next = document.getElementById("next");
+    const circles = document.querySelectorAll(".circle");
 
+    let currentStep = 1;
+
+    next.addEventListener("click", () => {
+      currentStep++;
+      if (currentStep > circles.length) currentStep = circles.length;
+      update();
+    });
+
+    prev.addEventListener("click", () => {
+      currentStep--;
+      if (currentStep < 1) currentStep = 1;
+      update();
+    });
+
+    function update() {
+      circles.forEach((circle, idx) => {
+        if (idx < currentStep) {
+          circle.classList.add("active");
+        } else {
+          circle.classList.remove("active");
+        }
+      });
+
+      const actives = document.querySelectorAll(".circle.active");
+      progress.style.width = ((actives.length - 1) / (circles.length - 1)) * 100 + "%";
+
+      prev.disabled = currentStep === 1;
+      next.disabled = currentStep === circles.length;
+    }
+  </script>
 </body>
-
 </html>
