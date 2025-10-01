@@ -4,11 +4,85 @@
 
 <head>
 	<link rel="stylesheet" href="styles.css">
+	<style>
+		/* .main{
+			border:2px solid black;
+		} */
+		.inside1{
+			width:100%;
+			display:flex;
+			justify-content:space-evenly;
+		}
+		.inside2{
+			width:100%;
+			display:flex;
+			justify-content:space-evenly;
+			padding:20px;
+		}
+		.circle{
+			width:50px;
+			height:50px;
+			border-radius:50%;
+			border:2px solid red;
+			margin:20px;
+		}
+		.circle:hover{
+			box-shadow:6px 4px 4px red;
+			cursor:pointer;
+		}
+		.inside2 button{
+			background:none;
+			border:none;
+		}
+		button:hover{
+			cursor:pointer;
+			/* font-size:20px; */
+		  box-shadow:6px 4px 2px black
+		}
+		.active{
+			background-color:grey;
+		}
+	</style>
 </head>
 
 <body>
 	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
+	<div class="main">
+		<div class="inside1">
+			<div class="circle" id="circle-1"></div>
+		<div class="circle" id="circle-2"></div>
+		<div class="circle" id="circle-3"></div>
+		<div class="circle" id="circle-4"></div>
+		<div class="circle" id="circle-5"></div>
+		</div>
+		<div class="inside2">
+			<button id="prev"><--</button>
+			<button id="next">--></button>
+		</div>
+	</div>
+    <script>
+		let circles = document.querySelectorAll(".circle");
+		let prev = document.getElementById("prev");
+		let next = document.getElementById("next");
+
+		let ind = -1;
+		let cind = -1;
+		if(ind<=0)prev.style.disable = true;
+		if(ind>=circles.length-1)next.style.disable=true;
+		if(ind>=1&& ind<=circles.length-2){
+			prev.style.disable = false;
+			next.style.disable = false;
+		}
+		
+		prev.addEventListener("click",(e)=>{
+			circles[ind].classList.remove("active");
+			ind--;
+		});
+		next.addEventListener("click",(e)=>{
+			ind++;
+			circles[ind].classList.add("active");
+		});
+		
 </script>
 
 </body>
